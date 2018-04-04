@@ -19,9 +19,26 @@ def print_table(table, title_list):
         This function doesn't return anything it only prints to console.
     """
 
-    # your goes code
+    length_list = []
 
-    pass
+    for title in title_list:  # counts titles length
+        length = len(title)
+        length_list.append(length)
+
+    for row in table:
+        for index, cell in enumerate(row):
+            if length_list[index] < len(cell):
+                length_list[index] = len(cell)
+
+    for index, title in enumerate(title_list):  # prints title
+        print("| " + "{:{align}{width}}".format(title, align="^", width=length_list[index]) + " |", end="")
+    print("")
+
+    for row in table:  # prints the table
+        print("")
+        for index, cell in enumerate(row):
+            print("| " + "{:{align}{width}}".format(cell, align="^", width=length_list[index]) + " |", end="")
+    print("\n")
 
 
 def print_result(result, label):
@@ -62,9 +79,10 @@ def print_menu(title, list_options, exit_message):
         This function doesn't return anything it only prints to console.
     """
 
-    # your code
-
-    pass
+    print("\t" + title + ":")
+    for enu, option in enumerate(list_options, 1):
+        print("\t" * 2, "({}) {}".format(enu, option))
+    print("\t" * 2, "(0) {}".format(exit_message))
 
 
 def get_inputs(list_labels, title):
@@ -87,9 +105,8 @@ def get_inputs(list_labels, title):
             [<user_input_1>, <user_input_2>, <user_input_3>]
     """
     inputs = []
-
-    # your code
-
+    for row in list_labels:
+        inputs.append(input(row))
     return inputs
 
 

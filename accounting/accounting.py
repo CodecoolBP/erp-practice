@@ -28,9 +28,21 @@ def start_module():
         None
     """
 
-    # you code
-
-    pass
+    while True:
+        my_table = data_manager.get_table_from_file("accounting/items.csv")
+        menu = ["Show table", "Add to table", "Remove from table", "Update data"]
+        ui.print_menu("Accounting manager", menu, "Exit menu")
+        
+        inputs = ui.get_inputs(["Please choose a number: "], "")
+        option = inputs[0]
+        if option == "1":
+            show_table(my_table)
+        elif option == "2":
+            add(my_table)
+        elif option == "3":
+            item_id = ui.get_inputs(["Which ID would you like to remove? "], "")
+            remove(my_table, item_id)
+        
 
 
 def show_table(table):
@@ -44,9 +56,8 @@ def show_table(table):
         None
     """
 
-    # your code
-
-    pass
+    title_list = ["ID", "Month", "Day", "Year", "Type", "Amount"]
+    ui.print_table(table, title_list)
 
 
 def add(table):
@@ -60,8 +71,12 @@ def add(table):
         Table with a new record
     """
 
-    # your code
-
+    datas = ["Month: ", "Day: ", "Year: ", "Type: ", "Amount: "]
+    generaged_id = common.generate_random(table)
+    inputs = ui.get_inputs(datas, "")
+    table.insert(0, generaged_id)
+    table.append(inputs)
+    data_manager.write_table_to_file("accounting/items.csv", table)
     return table
 
 

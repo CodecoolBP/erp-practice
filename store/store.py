@@ -26,9 +26,27 @@ def start_module():
         None
     """
 
-    # your code
+    while True:
+        my_table = data_manager.get_table_from_file("store/games.csv")
+        menu = ["Show table", "Add to table", "Remove from table", "Update data", "How Many Manufacturer"]
+        ui.print_menu("Store Manager", menu, "Exit this menu")
 
-    pass
+        inputs = ui.get_inputs(["Please choose a number: "], "")
+        option = inputs[0]
+        if option == "1":
+            show_table(my_table)
+        elif option == "2":
+            add(my_table)
+        elif option == "3":
+            product_id = ui.get_inputs(["Which ID would you like to remove? "], "")
+            remove(my_table, product_id)
+        elif option == "4":
+            product_id = ui.get_inputs(["Which ID would you like to update? "], "")
+            update(my_table, product_id)
+        elif option == "5":
+            get_counts_by_manufacturers(my_table)
+        elif option == "0":
+            break
 
 
 def show_table(table):
@@ -41,10 +59,8 @@ def show_table(table):
     Returns:
         None
     """
-
-    # your code
-
-    pass
+    title_list = ["ID", "Game Title", "Manufacturer", "Price", "In Stock"]
+    ui.print_table(table, title_list)
 
 
 def add(table):
@@ -57,9 +73,12 @@ def add(table):
     Returns:
         Table with a new record
     """
-
-    # your code
-
+    game_details = ["Game Title: ", "Manufacturer: ", "Price: ", "In Stock: "]
+    generaged_id = common.generate_random(table)
+    inputs = ui.get_inputs(game_details, "")
+    inputs.insert(0, generaged_id)
+    table.append(inputs)
+    data_manager.write_table_to_file("store/games.csv", table)
     return table
 
 
@@ -75,8 +94,10 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    # your code
-
+    for index, row in enumerate(table):
+        if id_[0] in row[0]:
+            table.pop(index)
+    data_manager.write_table_to_file("store/games.csv", table)
     return table
 
 
@@ -92,8 +113,14 @@ def update(table, id_):
         table with updated record
     """
 
-    # your code
-
+    inputs = ui.get_inputs(["Game Title: ", "Manufacturer: ", "Price: ", "In Stock: "], "")
+    for index, row in enumerate(table):
+        ids = row[0]
+        if id_[0] in ids:
+            inputs.insert(0, id_[0])
+            table.pop(index)
+            table.insert(index, inputs)
+    data_manager.write_table_to_file("store/games.csv", table)
     return table
 
 
@@ -104,9 +131,11 @@ def update(table, id_):
 # return type: a dictionary with this structure: { [manufacturer] : [count] }
 def get_counts_by_manufacturers(table):
 
-    # your code
-
-    pass
+    table = data_manager.get_table_from_file(table)
+    for row in table:
+        all_manufacturers = row[2]
+        kind_of_games = {manufacturer: all_manufacturers.count(manufacturer) for manufacturer in all_manufacturers}
+    return kind_of_games
 
 
 # the question: What is the average amount of games in stock of a given manufacturer?

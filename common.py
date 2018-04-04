@@ -21,8 +21,10 @@ def generate_random(table):
         Random and unique string
     """
 
-    generated = ''
+    char1 = str(random.choice("kjtebv"))
+    char3 = str(random.choice("931"))
+    char4 = str(random.choice("458"))
+    char6 = str(random.choice("abcdefghijklmnopqrstvwxyz"))
+    id_tag = (char1, "H", char3, char4, "J", char6, "\u0023", "\u0026")
+    return "".join(id_tag)
 
-    # your code
-
-    return generated
