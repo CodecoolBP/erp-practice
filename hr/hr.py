@@ -25,9 +25,33 @@ def start_module():
         None
     """
 
-    # your code
+    data_of_module = "hr/persons.csv"
+    full_module_name = "Human resources manager"
+    short_module_name = "hr/hr.py"
+    common.create_module_menus(data_of_module, full_module_name, hr.short_module_name)
 
-    pass
+    # my_table = data_manager.get_table_from_file("hr/persons.csv")
+    # menu = ["Show table", "Add to table", "Remove from table", "Update data"]
+
+    # while True:
+    #     ui.print_menu("Human resources manager", menu, "Exit this menu")
+    #     inputs = ui.get_inputs(["Please enter a number: "], "")
+    #     option = inputs[0]
+
+    #     if option == "1":
+    #         show_table(my_table)
+    #     elif option == "2":
+    #         add(my_table)
+    #     elif option == "3":
+    #         product_id = ui.get_inputs(["Which ID would you like to remove? "], "")
+    #         remove(my_table, product_id)
+    #     elif option == "4":
+    #         product_id = ui.get_inputs(["Which ID would you like to update? "], "")
+    #         update(my_table, product_id)
+    #     elif option == "0":
+    #         break
+    #     else:
+    #         raise KeyError("There is no such option.")
 
 
 def show_table(table):
@@ -41,9 +65,8 @@ def show_table(table):
         None
     """
 
-    # your code
-
-    pass
+    title_list = ["ID", "Name", "Date of birth"]
+    ui.print_table(table, title_list)
 
 
 def add(table):
@@ -57,8 +80,11 @@ def add(table):
         Table with a new record
     """
 
-    # your code
-
+    inputs = ui.get_inputs(["Name: ", "Date of birth: "], "")
+    generated_id = common.generate_random(table)
+    inputs.insert(0, generated_id)
+    table.append(inputs)
+    data_manager.write_table_to_file("hr/persons.csv", table)
     return table
 
 
@@ -74,8 +100,10 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    # your code
-
+    for index, row in enumerate(table):
+        if id_[0] in row[0]:
+            del table[index]
+    data_manager.write_table_to_file("hr/persons.csv", table)
     return table
 
 
@@ -91,8 +119,14 @@ def update(table, id_):
         table with updated record
     """
 
-    # your code
-
+    inputs = ui.get_inputs(["Name: ", "Date of birth: "], "")
+    for index, row in enumerate(table):
+        ids = row[0]
+        if id_[0] in ids:
+            inputs.insert(0, id_[0])
+            del table[index]
+            table.insert(index, inputs)
+    data_manager.write_table_to_file("hr/persons.csv", table)
     return table
 
 

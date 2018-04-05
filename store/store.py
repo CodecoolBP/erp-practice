@@ -26,13 +26,14 @@ def start_module():
         None
     """
 
-    while True:
-        my_table = data_manager.get_table_from_file("store/games.csv")
-        menu = ["Show table", "Add to table", "Remove from table", "Update data", "How Many Manufacturer"]
-        ui.print_menu("Store Manager", menu, "Exit this menu")
+    my_table = data_manager.get_table_from_file("store/games.csv")
+    menu = ["Show table", "Add to table", "Remove from table", "Update data", "How Many Manufacturer?"]
 
-        inputs = ui.get_inputs(["Please choose a number: "], "")
+    while True:
+        ui.print_menu("Store Manager", menu, "Exit this menu")
+        inputs = ui.get_inputs(["Please enter a number: "], "")
         option = inputs[0]
+
         if option == "1":
             show_table(my_table)
         elif option == "2":
@@ -47,6 +48,8 @@ def start_module():
             get_counts_by_manufacturers(my_table)
         elif option == "0":
             break
+        else:
+            raise KeyError("There is no such option.")
 
 
 def show_table(table):
@@ -73,10 +76,9 @@ def add(table):
     Returns:
         Table with a new record
     """
-    game_details = ["Game Title: ", "Manufacturer: ", "Price: ", "In Stock: "]
-    generaged_id = common.generate_random(table)
-    inputs = ui.get_inputs(game_details, "")
-    inputs.insert(0, generaged_id)
+    inputs = ui.get_inputs(["Game Title: ", "Manufacturer: ", "Price: ", "In Stock: "], "")
+    generated_id = common.generate_random(table)
+    inputs.insert(0, generated_id)
     table.append(inputs)
     data_manager.write_table_to_file("store/games.csv", table)
     return table
@@ -96,7 +98,7 @@ def remove(table, id_):
 
     for index, row in enumerate(table):
         if id_[0] in row[0]:
-            table.pop(index)
+            del table[index]
     data_manager.write_table_to_file("store/games.csv", table)
     return table
 
@@ -118,7 +120,7 @@ def update(table, id_):
         ids = row[0]
         if id_[0] in ids:
             inputs.insert(0, id_[0])
-            table.pop(index)
+            del table[index]
             table.insert(index, inputs)
     data_manager.write_table_to_file("store/games.csv", table)
     return table
